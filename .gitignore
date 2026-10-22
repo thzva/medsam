@@ -1,0 +1,15 @@
+# Large or private artefacts: never versioned
+/data/
+/outputs*/
+*.pth
+*.pt
+*.npz
+*.bak*
+__pycache__/
+*.pyc
+*.claim/
+# Review correspondence and manuscripts are kept out of the code repository
+/revision/
+MDPI_*/
+Review_Report*.pdf
+research_proposal.md

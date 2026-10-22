@@ -1,0 +1,27 @@
+# ── PyTorch (skip if already installed via conda) ──
+torch>=2.0.0
+torchvision>=0.15.0
+
+# ── Core ──
+timm>=0.9.0
+numpy>=1.24.0
+pandas>=2.0.0
+Pillow>=10.0.0
+pyyaml>=6.0
+tqdm>=4.65.0
+einops>=0.7.0
+
+# ── Scientific ──
+scikit-learn>=1.2.0
+scipy>=1.10.0
+
+# ── Visualization ──
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# ── CV ──
+opencv-python>=4.8.0
+
+# ── Logging ──
+tensorboard>=2.13.0
+wandb>=0.15.0

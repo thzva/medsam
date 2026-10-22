@@ -1,0 +1,96 @@
+# TMS-EDL Default Configuration
+# Optimised for NIH Chest X-ray 14 (112k images, 15 multi-label classes)
+
+seed: 42
+device: "cuda"
+
+# ── Data ──────────────────────────────────────────────
+data:
+  dataset: "nih_chestxray"          # nih_chestxray | camelyon16
+  data_root: "data"
+  image_size: 224
+  num_workers: 12
+  pin_memory: true
+
+  # NIH Chest X-ray specific
+  nih:
+    csv_path: "data/NIH_Chest_Xray_Dataset/data/Data_Entry_2017_v2020.csv"
+    image_dir: "data/NIH_Chest_Xray_Dataset/data/images/images"
+    train_list: "data/NIH_Chest_Xray_Dataset/data/train_val_list.txt"
+    test_list: "data/NIH_Chest_Xray_Dataset/data/test_list.txt"
+    num_classes: 15
+    multi_label: true
+
+  # Camelyon16 specific
+  camelyon16:
+    data_dir: "data/Camelyon16"
+    patch_size: 256
+    num_classes: 2
+    multi_label: false
+
+# ── Model ─────────────────────────────────────────────
+model:
+  # Global Expert (ViT)
+  global_expert:
+    backbone: "vit_base_patch16_224"
+    pretrained: true
+    embed_dim: 768
+
+  # Local Expert (ResNet)
+  local_expert:
+    backbone: "resnet50"
+    pretrained: true
+    embed_dim: 2048
+    use_attention_crop: true   # attention-based ROI cropping
+    crop_size: 160             # local patch size for ROI cropping
+    top_k_patches: 6           # top-k attention patches
+
+  # Evidential head
+  evidential:
+    activation: "softplus"     # softplus | relu | exp
+
+  # Fusion
+  fusion:
+    method: "dempster_shafer"  # dempster_shafer | average | gating
+
+# ── Training ──────────────────────────────────────────
+training:
+  epochs: 30
+  batch_size: 80              # 40/GPU under 2-GPU DDP (fits GPU 0 40GB budget)
+  gradient_accumulation: 1     # no accumulation needed at bs=48
+  val_ratio: 0.1
+
+  optimizer:
+    type: "AdamW"
+    lr: 1.0e-4                 # head lr (evidential heads, fusion, projections)
+    backbone_lr: 2.0e-5        # backbone lr (ViT encoder, ResNet encoder)
+    weight_decay: 5.0e-4       # moderate regularisation
+
+  scheduler:
+    type: "cosine"
+    warmup_epochs: 5
+    min_lr: 1.0e-7
+
+  loss:
+    type: "edl"                # edl | ce
+    kl_weight: 0.01            # KL divergence regulariser (reduced: kl_disabled ablation showed 0.05 was too strong)
+    annealing_epochs: 10       # linearly anneal kl_weight over first 10 epochs
+
+  mixed_precision: true
+  gradient_clip: 1.0
+  compile: false                 # torch.compile: set true for extra ~20% speed (first epoch slow)
+  early_stopping_patience: 8
+
+# ── Evaluation ────────────────────────────────────────
+evaluation:
+  metrics: ["auc", "acc", "ece", "ood_auroc"]
+  ece_bins: 15
+  ood_dataset: "imagenet_samples"  # for OOD detection test
+
+# ── Logging ───────────────────────────────────────────
+logging:
+  output_dir: "outputs"
+  log_interval: 100
+  save_interval: 1          # save last.pth every epoch for resume
+  use_wandb: false
+  wandb_project: "tms-edl"
