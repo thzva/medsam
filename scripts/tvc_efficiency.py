@@ -18,9 +18,9 @@ DEV = torch.device("cuda:0")
 HR = CFG["data"]["hr_size"]
 ROWS = [("ViT-B/16, BCE", "vit_b16_ce", 1),
         ("DenseNet-121, BCE", "densenet121_ce", 1),
-        ("ResNet-50, MC dropout (10 passes)", "resnet50_mc_dropout", 1),
-        ("Deep ensemble (5$\\times$ ViT-B/16)", "vit_b16_ce", 5),
-        ("ViT-B/16, Beta EDL (global stream)", "stream_global_only", 1),
+        ("ResNet-50, MC dropout, 10 passes", "resnet50_mc_dropout", 1),
+        ("Deep ensemble, 5$\\times$ ViT-B/16", "vit_b16_ce", 5),
+        ("ViT-B/16 Beta EDL, global stream", "stream_global_only", 1),
         ("Dual stream, crop disabled", "attn_crop_off", 1),
         ("Dual stream, gated MIL + NMS", "tms_edl", 1)]
 

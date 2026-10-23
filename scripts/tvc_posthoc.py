@@ -138,9 +138,9 @@ d = "outputs_mil2/tms_edl/seed42"
 if os.path.exists(f"{d}/ood_arrays.npz"):
     a, o = load_run(d)
     fig, ax = plt.subplots(figsize=(3.6, 3.0))
-    sets = [("NIH test (ID)", np.log10(a["test_u_global"]), np.log10(a["test_u_local"]), BLUE),
-            ("ImageNet (OOD)", np.log10(o["ood_imagenet_u_global"]), np.log10(o["ood_imagenet_u_local"]), ORANGE),
-            ("liver CT (OOD)", np.log10(o["ood_ct_liver_u_global"]), np.log10(o["ood_ct_liver_u_local"]), AQUA)]
+    sets = [("NIH test, ID", np.log10(a["test_u_global"]), np.log10(a["test_u_local"]), BLUE),
+            ("ImageNet, OOD", np.log10(o["ood_imagenet_u_global"]), np.log10(o["ood_imagenet_u_local"]), ORANGE),
+            ("liver CT, OOD", np.log10(o["ood_ct_liver_u_global"]), np.log10(o["ood_ct_liver_u_local"]), AQUA)]
     rng = np.random.default_rng(0)
     for lab, x, yv, col in sets:
         i = rng.choice(len(x), min(len(x), 3000), replace=False)
@@ -150,7 +150,7 @@ if os.path.exists(f"{d}/ood_arrays.npz"):
     bound = ug * ul / (ug + ul - ug * ul)            # Proposition 1 upper bound on u_f
     cs = ax.contour(gx, gy, np.log10(bound), levels=[-4.5, -3.5, -2.5, -1.5], colors=GREY, linewidths=0.7)
     ax.clabel(cs, fmt=lambda v: f"$u_f\\leq10^{{{v:g}}}$", fontsize=5.5)
-    ax.set_xlabel("$\\log_{10} u_g$ (global)"); ax.set_ylabel("$\\log_{10} u_\\ell$ (local)")
+    ax.set_xlabel("$\\log_{10} u_g$, global"); ax.set_ylabel("$\\log_{10} u_\\ell$, local")
     ax.set_xlim(-1.8, -0.8); ax.set_ylim(-4.6, 0.1)
     ax.legend(frameon=False, fontsize=6.5, markerscale=3, loc="lower left")
     fig.tight_layout(); fig.savefig(f"{OUT}/figures/ood_density.pdf", dpi=300)

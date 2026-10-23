@@ -63,7 +63,7 @@ ax.text(5.3, 10.6, "$224^2$ global\n$560^2$ local", ha="center", va="top", fonts
 
 # ---------------- global stream (top)
 arrow(10.1, 18.5, 12.5, 26.5)
-box(12.8, 24.5, 9.5, 4, "ViT-B/16\n(ImageNet-21k)", "#e7f0fb")
+box(12.8, 24.5, 9.5, 4, "ViT-B/16\nImageNet-21k", "#e7f0fb")
 arrow(22.6, 26.5, 25, 26.5)
 box(25.3, 24.5, 9.5, 4, "Beta head\nper finding $c$", "#e7f0fb")
 arrow(35.1, 26.5, 37.5, 26.5)
@@ -82,7 +82,7 @@ for k, (ix, wk) in enumerate(zip(idx, w)):
     r = Rectangle((12.8 + 8 * (cx - half), 3.0 + 8 * (1 - cy - half)), 8 * 2 * half, 8 * 2 * half,
                   fill=False, ec=BLUE if wk == w.max() else ORANGE, lw=0.9, zorder=3)
     ax.add_patch(r); r.set_clip_path(clip)
-ax.text(16.8, 11.6, "attention map + top-$K$ crops (NMS), $K{=}6$", ha="center", va="bottom", fontsize=5.8)
+ax.text(16.8, 11.6, "attention map, top-$K$ crops with NMS, $K{=}6$", ha="center", va="bottom", fontsize=5.8)
 arrow(21.1, 7, 23.4, 7)
 for k, c in enumerate(crops):
     xo, yo = 23.7 + (k % 3) * 2.9, 8.1 - (k // 3) * 2.9
@@ -102,12 +102,12 @@ box(52.3, 14.5, 10.5, 5.2, "per-label\nDempster's rule\n$u_f \\leq \\min(u_g,u_\
 arrow(47.6, 26.0, 55.5, 20.0)
 arrow(57.4, 9.3, 57.4, 14.2)
 arrow(63.1, 17.1, 65.0, 17.1)
-box(65.3, 15.0, 6.2, 4.2, "$p_{f,c}$\n(prediction)", "#ffffff", fs=6.5)
+box(65.3, 15.0, 6.2, 4.2, "prediction\n$p_{f,c}$", "#ffffff", fs=6.5)
 ax.text(68.4, 13.8, "fused $u_f$:\nvacuity collapse", ha="center", va="top", fontsize=5.8, color=ORANGE)
 # decoupled read-out
 arrow(47.6, 27.5, 65.3, 27.5, col=BLUE)
 box(65.3, 25.6, 6.2, 3.8, "OOD score\n$\\bar u_g$", "#e7f0fb", fs=6.5)
-ax.text(56.5, 28.3, "decoupled read-out (no retraining)", ha="center", fontsize=5.8, color=BLUE)
+ax.text(56.5, 28.3, "decoupled read-out, no retraining", ha="center", fontsize=5.8, color=BLUE)
 ax.text(1, 31.6, "global stream", fontsize=7, color=BLUE, fontweight="bold")
 ax.text(1, 1.2, "local stream", fontsize=7, color=ORANGE, fontweight="bold")
 fig.savefig("revision/tvc/figures/architecture.pdf", dpi=300)

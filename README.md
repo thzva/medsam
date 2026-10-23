@@ -124,7 +124,8 @@ number in the paper is typed by hand.
 | Script | Produces |
 |---|---|
 | `scripts/tvc_posthoc.py` | decoupled read-out, deep ensemble, risk–coverage, OOD density figure |
-| `scripts/tvc_make_assets.py` | all result tables, the vacuity-collapse and corruption-sweep figures (run after `tvc_posthoc.py`) |
+| `scripts/tvc_tables.py` | all result tables, styled, with the best value per column highlighted (run after `tvc_posthoc.py`) |
+| `scripts/tvc_make_assets.py` | the vacuity-collapse and corruption-sweep figures |
 | `scripts/tvc_efficiency.py` | parameter count, latency, throughput, training step time and memory |
 | `scripts/tvc_qualitative.py` | attention maps, selected crops and per-image vacuities |
 | `scripts/tvc_fig1.py` | architecture figure |
