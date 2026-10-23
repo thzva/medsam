@@ -58,7 +58,7 @@ M = {  # metric extractors
 
 class Cell:
     """A numeric cell: mean, optional std, display precision."""
-    def __init__(self, vals, nd=4, std=True):
+    def __init__(self, vals, nd=4, std=False):
         vals = [v for v in vals if v is not None]
         self.m = st.mean(vals) if vals else None
         self.s = st.stdev(vals) if (std and len(vals) > 1) else None
@@ -74,7 +74,7 @@ class Cell:
         return f"\\best{{{t}}}" if best else t
 
 
-def cell(key, metric, nd=4, std=True):
+def cell(key, metric, nd=4, std=False):
     D = load(key)
     if len(D) < 3:
         return None
@@ -105,7 +105,7 @@ def write(name, groups, higher):
                     out.append(c.fmt(best[j] is not None and c.m is not None and abs(c.m - best[j]) < 1e-12))
                 else:
                     out.append(str(c))
-            lines.append(("\\stripe " if stripe else "") + label + " & " + " & ".join(out) + " \\\\")
+            lines.append(label + " & " + " & ".join(out) + " \\\\")
             stripe = not stripe
     open(f"{OUT}/tab_{name}.tex", "w").write("\n".join(lines) + "\n")
 
@@ -151,7 +151,7 @@ def delta(a, b, metric):
     A, B = cell(a, metric), cell(b, metric)
     if A is None or B is None:
         return None
-    return f"{B.m - A.m:+.3f}"
+    return f"{B.m - A.m:.3f}"
 write("beta", [
     (None, [
         ("Dual stream", [cell("dir_dual", "auc", 4, False), cell("gated_nms", "auc", 4, False), delta("dir_dual", "gated_nms", "auc"),
@@ -183,7 +183,7 @@ rm = ["auc", "ece", "ood_g", "ood_f"]
 rnd = [4, 4, 3, 3]
 def rrow(key):
     c = row(key, rm, rnd)
-    c.append(f"{c[3].m - c[2].m:+.3f}" if c[2] and c[3] else None)
+    c.append(f"{c[3].m - c[2].m:.3f}" if c[2] and c[3] else None)
     return c
 write("rules", [
     ("Conjunctive", [("Dempster", rrow("gated_nms")), ("Dempster, independent re-run", rrow("dempster_rerun")),
